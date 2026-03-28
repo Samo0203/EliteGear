@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', system_ui, sans-serif;
+}
+
+.admin-card {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
+:root {
+  --carbon: #2B362E;
+  --oat-milk: #F5F0E8;
+  --leaf: #6B8063;
+  --linen: #B2AB9C;
+
+  /* Useful derived colors */
+  --bg-primary: var(--oat-milk);
+  --bg-card: #ffffff;
+  --text-primary: var(--carbon);
+  --text-secondary: var(--linen);
+  --accent: var(--leaf);
+  --border: var(--linen);
+  --button-hover: #5a6b52;
+}
