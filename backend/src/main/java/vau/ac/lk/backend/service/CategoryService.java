@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import vau.ac.lk.backend.model.Category;
 import vau.ac.lk.backend.repository.CategoryRepository;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,5 +55,4 @@ public class CategoryService {
     public void deleteCategory() {
         repo.deleteAll();
     }
-
 }

@@ -1,4 +1,5 @@
 package vau.ac.lk.backend.controller;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/eg")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService service;

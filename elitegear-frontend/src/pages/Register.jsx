@@ -26,7 +26,7 @@ export default function Register() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -43,7 +43,7 @@ export default function Register() {
       return;
     }
 
-    const result = register({
+    const result = await register({
       name: formData.name,
       username: formData.username,
       email: formData.email,

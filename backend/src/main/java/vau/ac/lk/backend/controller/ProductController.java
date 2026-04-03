@@ -11,7 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/eg")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:5173")
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService service;
