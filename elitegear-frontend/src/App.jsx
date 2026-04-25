@@ -7,6 +7,7 @@ import Register from './pages/Register';           // ← Add this import
 import AdminLayout from './layouts/AdminLayout';
 import Dashboard from './pages/admin/Dashboard';
 import ProductList from './pages/admin/ProductList';
+import CategoryList from './pages/admin/CategoryList';
 
 function ProtectedRoute({ children }) {
   const { user } = useAuth();
@@ -53,6 +54,7 @@ function App() {
           }>
             <Route index element={<Dashboard />} />
             <Route path="products" element={<ProductList />} />
+            <Route path="categories" element={<CategoryList />} />
           </Route>
 
           {/* Optional: Catch-all route */}

@@ -15,6 +15,14 @@ export const productAPI = {
   delete: (id) => api.delete(`/deleteproduct/${id}`),
 };
 
+export const categoryAPI = {
+  getAll: () => api.get('/getcategory'),
+  getById: (id) => api.get(`/getcategory/${id}`),
+  create: (category) => api.post('/postcategory', category),
+  update: (id, category) => api.put(`/putcategory/${id}`, category),
+  delete: (id) => api.delete(`/deletecategory/${id}`),
+};
+
 export const userAPI = {
   register: (userData) => api.post('/register', userData),
   login: (credentials) => api.post('/login', credentials),
