@@ -11,9 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/eg")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 @RequiredArgsConstructor
 public class CategoryController {
+
     private final CategoryService service;
 
     @GetMapping("/getcategory")
@@ -29,25 +30,21 @@ public class CategoryController {
     }
 
     @PostMapping("/postcategory")
-    public String create(@RequestBody Category category) {
+    public ResponseEntity<String> create(@RequestBody Category category) {
         service.createCategory(category);
-        return "Successfully Added";
+        return ResponseEntity.ok("Category created successfully");
     }
 
     @PutMapping("/putcategory/{id}")
-    public Category update(@PathVariable String id, @RequestBody Category category) {
-        return service.updateCategory(id, category);
+    public ResponseEntity<Category> update(@PathVariable String id,
+                                           @RequestBody Category category) {
+        return ResponseEntity.ok(service.updateCategory(id, category));
     }
 
     @PatchMapping("/patchcategory/{id}")
-    public Category patch(@PathVariable String id, @RequestBody Map<String, Object> updates) {
-        return service.partialUpdate(id, updates);
-    }
-
-    @DeleteMapping("/deletecategory")
-    public String deleteCategory() {
-        service.deleteCategory();
-        return "Deleted Successfully";
+    public ResponseEntity<Category> patch(@PathVariable String id,
+                                          @RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(service.partialUpdate(id, updates));
     }
 
     @DeleteMapping("/deletecategory/{id}")

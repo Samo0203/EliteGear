@@ -11,10 +11,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Category {
+
     @Id
     private String id;
+
     private String name;
     private String description;
     private String imageUrl;
-    private String type;   // "INDOOR" or "OUTDOOR"
+    private String type;   
 }
