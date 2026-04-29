@@ -21,4 +21,5 @@ import org.springframework.data.mongodb.core.mapping.Document;
         private String region;
         private String gender;
         private String password;   // In production, hash this with BCrypt
+        private String role;       // "USER" or "ADMIN"
 }
