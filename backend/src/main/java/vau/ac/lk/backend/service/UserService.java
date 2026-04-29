@@ -3,7 +3,6 @@ package vau.ac.lk.backend.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import vau.ac.lk.backend.model.User;
 import vau.ac.lk.backend.repository.UserRepository;
 
@@ -13,34 +12,73 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final UserRepository     userRepository;
+    private final BCryptPasswordEncoder passwordEncoder; // ← injected Bean, NOT new'd manually
 
+    // ── Register ──────────────────────────────────────────────────────────────
     public void registerUser(User user) {
-        // Check if username already exists
-        if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new RuntimeException("Username already taken");
         }
-        
-        // Hash the password before saving
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new RuntimeException("Email already registered");
+        }
+
+        // Hash password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
+    // ── Login ─────────────────────────────────────────────────────────────────
     public User loginUser(String username, String password) {
+        // Try username first, then email
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Invalid username or password"));
-        
-        // Verify the password against the hashed version
+                .or(() -> userRepository.findByEmail(username))
+                .orElseThrow(() -> new RuntimeException("Invalid credentials"));
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new RuntimeException("Invalid username or password");
+            throw new RuntimeException("Invalid credentials");
         }
-        
-        return user;
+
+        return user;  // password is WRITE_ONLY in model — won't appear in JSON response
     }
 
+    // ── Admin helpers ─────────────────────────────────────────────────────────
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    public void deleteUser(String id) {
+        userRepository.deleteById(id);
+    }
+
+    public User updateUser(String id, User updatedUser) {
+        User existing = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (updatedUser.getEmail() != null
+                && !updatedUser.getEmail().equalsIgnoreCase(existing.getEmail())
+                && userRepository.existsByEmail(updatedUser.getEmail())) {
+            throw new RuntimeException("Email already registered");
+        }
+
+        if (updatedUser.getUsername() != null
+                && !updatedUser.getUsername().equalsIgnoreCase(existing.getUsername())
+                && userRepository.existsByUsername(updatedUser.getUsername())) {
+            throw new RuntimeException("Username already taken");
+        }
+
+        if (updatedUser.getName() != null) existing.setName(updatedUser.getName());
+        if (updatedUser.getEmail() != null) existing.setEmail(updatedUser.getEmail());
+        if (updatedUser.getMobile() != null) existing.setMobile(updatedUser.getMobile());
+        if (updatedUser.getRegion() != null) existing.setRegion(updatedUser.getRegion());
+        if (updatedUser.getNic() != null) existing.setNic(updatedUser.getNic());
+        if (updatedUser.getAvatarUrl() != null) existing.setAvatarUrl(updatedUser.getAvatarUrl());
+
+        if (updatedUser.getPassword() != null && !updatedUser.getPassword().isBlank()) {
+            existing.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        }
+
+        return userRepository.save(existing);
+    }
 }

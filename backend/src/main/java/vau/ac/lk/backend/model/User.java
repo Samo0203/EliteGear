@@ -1,24 +1,45 @@
 package vau.ac.lk.backend.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.mongodb.core.index.Indexed;
 
-    @Document(collection = "users")
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public class User {
-        @Id
-        private String id;
+import java.time.LocalDateTime;
 
-        private String name;
-        private String username;
-        private String email;
-        private String mobile;
-        private String region;
-        private String gender;
-        private String password;   // In production, hash this with BCrypt
+@Document(collection = "users")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class User {
+
+    @Id
+    private String id;
+
+    private String name;
+
+    @Indexed(unique = true)
+    private String username;
+
+    @Indexed(unique = true)
+    private String email;
+
+    private String mobile;
+    private String region;
+    private String nic;        
+    private String avatarUrl;
+
+    /**
+     * WRITE_ONLY: password is accepted on input but never serialised
+     * in any API response — prevents hashed password leaking to frontend.
+     */
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
+
+    @CreatedDate
+    private LocalDateTime joinedAt;
 }
