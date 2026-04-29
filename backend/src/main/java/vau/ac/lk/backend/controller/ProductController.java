@@ -11,9 +11,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/eg")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 @RequiredArgsConstructor
 public class ProductController {
+
     private final ProductService service;
 
     @GetMapping("/getproduct")
@@ -28,26 +29,33 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    // Filter by category — used by Category page
+    @GetMapping("/getproduct/category/{category}")
+    public List<Product> getByCategory(@PathVariable String category) {
+        return service.getProductsByCategory(category);
+    }
+
+    // Search by name
+    @GetMapping("/getproduct/search")
+    public List<Product> search(@RequestParam String name) {
+        return service.searchProducts(name);
+    }
+
     @PostMapping("/postproduct")
-    public String create(@RequestBody Product product) {
+    public ResponseEntity<String> create(@RequestBody Product product) {
         service.createProduct(product);
-        return "Successfully Added";
+        return ResponseEntity.ok("Product created successfully");
     }
 
     @PutMapping("/putproduct/{id}")
-    public Product update(@PathVariable String id, @RequestBody Product product) {
-        return service.updateProduct(id, product);
+    public ResponseEntity<Product> update(@PathVariable String id, @RequestBody Product product) {
+        return ResponseEntity.ok(service.updateProduct(id, product));
     }
 
     @PatchMapping("/patchproduct/{id}")
-    public Product patch(@PathVariable String id, @RequestBody Map<String, Object> updates) {
-        return service.partialUpdate(id, updates);
-    }
-
-    @DeleteMapping("/deleteproduct")
-    public  String deleteProduct(){
-        service.deleteProduct();
-        return "Deleted Successfully";
+    public ResponseEntity<Product> patch(@PathVariable String id,
+                                         @RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(service.partialUpdate(id, updates));
     }
 
     @DeleteMapping("/deleteproduct/{id}")
@@ -55,5 +63,4 @@ public class ProductController {
         service.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
-
 }

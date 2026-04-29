@@ -6,5 +6,10 @@ import vau.ac.lk.backend.model.Product;
 import java.util.List;
 
 public interface ProductRepository extends MongoRepository<Product, String> {
+
     List<Product> findByCategory(String category);
+
+    List<Product> findByNameContainingIgnoreCase(String name);
+
+    List<Product> findByCategoryAndStockGreaterThan(String category, int stock);
 }

@@ -12,6 +12,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class ProductService {
+
     private final ProductRepository repo;
 
     public List<Product> getAllProducts() {
@@ -22,32 +23,39 @@ public class ProductService {
         return repo.findById(id);
     }
 
+    public List<Product> getProductsByCategory(String category) {
+        return repo.findByCategory(category);
+    }
+
+    public List<Product> searchProducts(String name) {
+        return repo.findByNameContainingIgnoreCase(name);
+    }
+
     public Product createProduct(Product product) {
         return repo.save(product);
     }
 
-    // Full update (PUT)
     public Product updateProduct(String id, Product newProduct) {
         newProduct.setId(id);
         return repo.save(newProduct);
     }
 
-    // Partial update (PATCH)
     public Product partialUpdate(String id, Map<String, Object> updates) {
         Product product = repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("Product not found"));
+                .orElseThrow(() -> new RuntimeException("Product not found: " + id));
 
         updates.forEach((key, value) -> {
             switch (key) {
-                case "name" -> product.setName((String) value);
-                case "price" -> product.setPrice((Double) value);
-                case "offerprice" -> product.setOfferprice((Double) value);
-                case "stock" -> product.setStock((Integer) value);
+                case "name"        -> product.setName((String) value);
+                case "category"    -> product.setCategory((String) value);
+                case "price"       -> product.setPrice(((Number) value).doubleValue());
+                case "offerPrice"  -> product.setOfferPrice(((Number) value).doubleValue());
+                case "stock"       -> product.setStock(((Number) value).intValue());
                 case "description" -> product.setDescription((String) value);
-                case "imageUrl" -> product.setImageUrl((String) value);
-                case "category" -> product.setCategory((String) value);
+                case "imageUrl"    -> product.setImageUrl((String) value);
             }
         });
+
         return repo.save(product);
     }
 
@@ -55,7 +63,7 @@ public class ProductService {
         repo.deleteById(id);
     }
 
-    public void deleteProduct() {
+    public void deleteAllProducts() {
         repo.deleteAll();
     }
 }
