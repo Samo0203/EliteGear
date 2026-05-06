@@ -165,34 +165,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Deal 3 — Technical */}
-            <div className="technical rounded-2xl overflow-hidden relative"
-              style={{ minHeight: '320px', padding: '40px', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end' }}>
-              <div className="absolute inset-0 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=600&q=80"
-                  alt="Deal" className="w-full h-full object-cover" style={{ opacity: 0.2 }} />
-              </div>
-              <div className="relative z-10">
-                <span className="chip mb-4" style={{ fontSize: '10px', background: 'rgba(241,237,227,0.15)' }}>NEW SEASON</span>
-                <h3 className="font-bold mb-2" style={{ color: 'var(--oat-milk)', fontSize: '24px', lineHeight: 1.2 }}>
-                  Master Grandset<br />
-                  <span className="body-sm" style={{ color: 'rgba(241,237,227,0.6)', fontWeight: 400 }}>Professional Chess Suite</span>
-                </h3>
-                <div className="flex items-center gap-3 mb-6">
-                  <span className="font-bold text-xl" style={{ color: 'var(--oat-milk)' }}>Rs. 12,000</span>
-                  <span style={{ color: 'rgba(241,237,227,0.4)', textDecoration: 'line-through', fontSize: '14px' }}>Rs. 18,000</span>
-                </div>
-                <button className="btn-primary" style={{ padding: '12px 24px', fontSize: '12px' }}
-                  onClick={() => navigate('/products')}>
-                  Quick Buy
-                </button>
-              </div>
-            </div>
-
-
-           
-
-
           </div>
         </div>
       </section>
