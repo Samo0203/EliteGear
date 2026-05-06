@@ -5,8 +5,9 @@ import org.springframework.stereotype.Service;
 import vau.ac.lk.backend.model.Order;
 import vau.ac.lk.backend.repository.OrderRepository;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,10 @@ public class OrderService {
 
     public List<Order> getAllOrders() {
         return repo.findAll();
+    }
+
+    public Optional<Order> getOrderById(String id) {
+        return repo.findById(id);
     }
 
     public List<Order> getOrdersByUser(String userId) {
