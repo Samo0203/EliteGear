@@ -95,7 +95,9 @@ export default function Profile() {
 
             {user.orders && user.orders.length > 0 ? (
               <div className="space-y-6">
-                {user.orders.map((order) => (
+                {user.orders
+                  .sort((a, b) => new Date(b.date) - new Date(a.date))
+                  .map((order) => (
                   <div key={order.orderId} className="bg-zinc-900 rounded-3xl p-8 hover:border-orange-500 border border-transparent transition">
                     <div className="flex justify-between items-start mb-6">
                       <div>

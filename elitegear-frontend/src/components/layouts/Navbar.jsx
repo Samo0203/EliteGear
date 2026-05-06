@@ -24,7 +24,14 @@ export default function Navbar() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (search.trim()) navigate(`/products?search=${encodeURIComponent(search.trim())}`);
+    if (search.trim()) {
+      const searchParam = `search=${encodeURIComponent(search.trim())}`;
+      if (location.pathname === '/products' || location.pathname === '/category') {
+        navigate(`${location.pathname}?${searchParam}`);
+      } else {
+        navigate(`/products?${searchParam}`);
+      }
+    }
   };
 
   return (

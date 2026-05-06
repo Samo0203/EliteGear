@@ -9,6 +9,7 @@ export function AdminProducts() {
   const [showForm,   setShowForm]   = useState(false);
   const [editing,    setEditing]    = useState(null);
   const [viewProduct, setViewProduct] = useState(null);
+  const [search,     setSearch]     = useState('');
   const [form, setForm] = useState({ name: '', category: '', price: '', offerPrice: '', stock: '', description: '', imageUrl: '', colors: [], sizes: [], weights: [] });
   const [colorInput, setColorInput] = useState('');
   const [sizeInput, setSizeInput] = useState('');
@@ -87,6 +88,11 @@ export function AdminProducts() {
     setForm({...form, weights: form.weights.filter(w => w !== weight)});
   };
 
+  const filteredProducts = products.filter(p =>
+    p.name.toLowerCase().includes(search.toLowerCase()) ||
+    p.category.toLowerCase().includes(search.toLowerCase())
+  );
+
   const inputStyle = { width:'100%', background:'#FFFFFF', border:'1px solid var(--ghost-border)', color:'#000000', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px', outline:'none' };
   const labelStyle = { display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' };
 
@@ -101,7 +107,16 @@ export function AdminProducts() {
           <Plus size={16} /> Add Product
         </button>
       </div>
-
+      {/* Search Bar */}
+      <div style={{ marginBottom:'24px' }}>
+        <input
+          type="text"
+          placeholder="Search products by name or category..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{ width:'100%', padding:'12px 14px', background:'white', border:'1px solid #DDD3CA', borderRadius:'8px', fontSize:'13px', fontFamily:"'Lexend',sans-serif", color:'var(--carbon)', outline:'none' }}
+        />
+      </div>
       {/* Modal */}
       {showForm && (
         <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.7)', display:'flex', alignItems:'center', justifyContent:'center', zIndex:50, padding:'20px' }}>
@@ -198,7 +213,7 @@ export function AdminProducts() {
               </tr>
             </thead>
             <tbody>
-              {products.map((p, i) => (
+              {filteredProducts.map((p, i) => (
                 <tr key={p.id} style={{ borderTop:'1px solid var(--ghost-border)', cursor: 'pointer' }}
                   onMouseEnter={e=>e.currentTarget.style.background='rgba(45,45,45,0.03)'}
                   onMouseLeave={e=>e.currentTarget.style.background='transparent'}
@@ -219,7 +234,7 @@ export function AdminProducts() {
                   </td>
                   <td style={{ padding:'16px 20px', fontSize:'13px', fontWeight:600, color:'#000000' }}>Rs. {Number(p.offerPrice || p.price).toLocaleString()}</td>
                   <td style={{ padding:'16px 20px' }}>
-                    <span style={{ fontSize:'13px', color: p.stock > 10 ? 'var(--primary)' : p.stock > 0 ? '#f59e0b' : '#ef4444', fontWeight:500 }}>
+                    <span style={{ fontSize:'13px', color: p.stock > 10 ? 'var(--leaf)' : p.stock > 0 ? '#f59e0b' : '#ef4444', fontWeight:500 }}>
                       {p.stock} left
                     </span>
                   </td>
@@ -261,14 +276,14 @@ export function AdminProducts() {
                 <div>
                   <p style={{ fontSize:'13px', textTransform:'uppercase', letterSpacing:'0.08em', color:'rgba(45,45,45,0.55)', marginBottom:'8px' }}>Pricing</p>
                   <div style={{ display:'flex', gap:'12px', alignItems:'flex-end' }}>
-                    {viewProduct.offerPrice ? <p style={{ fontSize:'28px', fontWeight:700, color:'#000000', margin:0 }}>Rs. {Number(viewProduct.offerPrice).toLocaleString()}</p> : <p style={{ fontSize:'28px', fontWeight:700, color:'#000000', margin:0 }}>Rs. {Number(viewProduct.price).toLocaleString()}</p>}
-                    {viewProduct.offerPrice ? <p style={{ fontSize:'14px', color:'#ef4444', textDecoration:'line-through', margin:0 }}>Rs. {Number(viewProduct.price).toLocaleString()}</p> : null}
+                    {viewProduct.offerPrice > 0 && viewProduct.offerPrice < viewProduct.price ? <p style={{ fontSize:'28px', fontWeight:700, color:'#000000', margin:0 }}>Rs. {Number(viewProduct.offerPrice).toLocaleString()}</p> : <p style={{ fontSize:'28px', fontWeight:700, color:'#000000', margin:0 }}>Rs. {Number(viewProduct.price).toLocaleString()}</p>}
+                    {viewProduct.offerPrice > 0 && viewProduct.offerPrice < viewProduct.price ? <p style={{ fontSize:'14px', color:'#ef4444', textDecoration:'line-through', margin:0 }}>Rs. {Number(viewProduct.price).toLocaleString()}</p> : null}
                   </div>
                 </div>
 
                 <div>
                   <p style={{ fontSize:'13px', textTransform:'uppercase', letterSpacing:'0.08em', color:'rgba(45,45,45,0.55)', marginBottom:'8px' }}>Stock</p>
-                  <p style={{ fontSize:'16px', fontWeight:600, color: viewProduct.stock > 10 ? 'var(--primary)' : viewProduct.stock > 0 ? '#f59e0b' : '#ef4444', margin:0 }}>{viewProduct.stock} left</p>
+                  <p style={{ fontSize:'16px', fontWeight:600, color: viewProduct.stock > 10 ? 'var(--leaf)' : viewProduct.stock > 0 ? '#f59e0b' : '#ef4444', margin:0 }}>{viewProduct.stock} left</p>
                 </div>
 
                 <div>

@@ -11,6 +11,7 @@ export default function Category() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const typeParam = searchParams.get('type') || '';
+  const searchQ = searchParams.get('search') || '';
 
   const [categories,  setCategories]  = useState([]);
   const [products,    setProducts]    = useState([]);
@@ -51,10 +52,20 @@ export default function Category() {
   const displayCategories = categories.length > 0 ? categories : staticCategories;
   const displayProducts   = products.length   > 0 ? products   : staticProducts;
 
-  const activeCat   = displayCategories.find(c => c.name === selected) || displayCategories[0];
+  // Filter categories and products based on search
+  const filteredCategories = displayCategories.filter(c => 
+    !searchQ || c.name.toLowerCase().includes(searchQ.toLowerCase())
+  );
+  const filteredProducts = displayProducts.filter(p => 
+    !searchQ || 
+    p.name.toLowerCase().includes(searchQ.toLowerCase()) ||
+    p.category.toLowerCase().includes(searchQ.toLowerCase())
+  );
+
+  const activeCat   = filteredCategories.find(c => c.name === selected) || filteredCategories[0];
   const filtered    = selected
-    ? displayProducts.filter(p => p.category === selected)
-    : displayProducts;
+    ? filteredProducts.filter(p => p.category === selected)
+    : filteredProducts;
 
   return (
     <div style={{ fontFamily: "'Lexend',sans-serif" }}>
@@ -114,7 +125,7 @@ export default function Category() {
               }}>
               ALL
             </button>
-            {displayCategories.map(cat => (
+            {filteredCategories.map(cat => (
               <button key={cat.id}
                 onClick={() => setSelected(cat.name)}
                 className="chip flex-shrink-0 transition-all"
@@ -123,7 +134,7 @@ export default function Category() {
                   color: selected === cat.name ? 'var(--oat-milk)' : 'var(--carbon)',
                   border: 'none', cursor: 'pointer',
                 }}>
-                {cat.name.toUpperCase()}
+                {cat.name}
               </button>
             ))}
           </div>
@@ -188,8 +199,8 @@ export default function Category() {
                     }
                   </div>
                   <div className="pt-4">
-                    <p className="font-bold label" style={{ color: 'var(--carbon)' }}>{product.name.toUpperCase()}</p>
-                    <p className="label mt-1" style={{ color: 'rgba(45,45,45,0.55)', fontSize: '10px' }}>{product.description}</p>
+                    <p className="font-bold label" style={{ color: 'var(--carbon)' }}>{product.name}</p>
+                    <p className="mt-1" style={{ color: 'rgba(45,45,45,0.55)', fontSize: '10px', fontWeight: 500, letterSpacing: '0.05em' }}>{product.description}</p>
                     <div className="flex gap-2 mt-2">
                       {(product.colors || ['#2D4A2D', '#888', '#1a1a1a']).slice(0, 3).map((c, ci) => (
                         <div key={ci} className="w-4 h-4 rounded-full" style={{ background: c }} />
@@ -208,7 +219,7 @@ export default function Category() {
                       </div>
                     )}
                     <div className="mt-3">
-                      {product.offerPrice && product.offerPrice < product.price ? (
+                      {product.offerPrice > 0 && product.offerPrice < product.price ? (
                         <div className="flex items-center gap-2">
                           <span className="font-bold" style={{ color: 'var(--carbon)', fontSize: '16px' }}>
                             Rs. {Number(product.offerPrice).toLocaleString()}
@@ -243,7 +254,7 @@ export default function Category() {
                   </div>
                   <div className="flex-1">
                     <p className="font-bold" style={{ color: 'var(--carbon)' }}>{product.name}</p>
-                    <p className="label mt-1" style={{ color: 'rgba(45,45,45,0.55)', fontSize: '10px' }}>{product.description}</p>
+                    <p className="mt-1" style={{ color: 'rgba(45,45,45,0.55)', fontSize: '10px', fontWeight: 500, letterSpacing: '0.05em' }}>{product.description}</p>
                     {product.colors && product.colors.length > 0 && (
                       <div className="flex gap-2 mt-2">
                         {product.colors.slice(0, 4).map((c, ci) => (
@@ -260,7 +271,7 @@ export default function Category() {
                       </div>
                     )}
                     <div className="mt-3">
-                      {product.offerPrice && product.offerPrice < product.price ? (
+                      {product.offerPrice > 0 && product.offerPrice < product.price ? (
                         <div className="flex items-center gap-2">
                           <span className="font-bold" style={{ color: 'var(--carbon)' }}>
                             Rs. {Number(product.offerPrice).toLocaleString()}

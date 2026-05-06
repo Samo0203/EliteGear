@@ -8,6 +8,7 @@ export function AdminCategories() {
   const [showForm,   setShowForm]   = useState(false);
   const [editing,    setEditing]    = useState(null);
   const [viewCategory, setViewCategory] = useState(null);
+  const [search,     setSearch]     = useState('');
   const [form, setForm] = useState({ name:'', description:'', imageUrl:'', type:'OUTDOOR' });
 
   const fetchAll = async () => {
@@ -47,6 +48,11 @@ export function AdminCategories() {
     await categoryAPI.delete(id); fetchAll();
   };
 
+  const filteredCategories = categories.filter(cat =>
+    cat.name.toLowerCase().includes(search.toLowerCase()) ||
+    cat.description?.toLowerCase().includes(search.toLowerCase())
+  );
+
   const inputStyle = { width:'100%', background:'white', border:'1px solid #DDD3CA', color:'var(--carbon)', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px', outline:'none' };
   const labelStyle = { display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' };
 
@@ -60,6 +66,17 @@ export function AdminCategories() {
         <button onClick={openAdd} className="btn-primary" style={{ display:'flex', alignItems:'center', gap:'8px', padding:'12px 20px', fontSize:'12px' }}>
           <Plus size={16} /> Add Category
         </button>
+      </div>
+
+      {/* Search Bar */}
+      <div style={{ marginBottom:'24px' }}>
+        <input
+          type="text"
+          placeholder="Search categories by name or description..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{ width:'100%', padding:'12px 14px', background:'white', border:'1px solid #DDD3CA', borderRadius:'8px', fontSize:'13px', fontFamily:"'Lexend',sans-serif", color:'var(--carbon)', outline:'none' }}
+        />
       </div>
 
       {showForm && (
@@ -93,7 +110,9 @@ export function AdminCategories() {
           <div style={{ gridColumn:'1/-1', display:'flex', justifyContent:'center', padding:'60px' }}>
             <div style={{ width:'28px', height:'28px', borderRadius:'50%', border:'2px solid var(--surface-high)', borderTopColor:'var(--leaf)', animation:'spin 0.8s linear infinite' }} />
           </div>
-        ) : categories.map(cat => (
+        ) : filteredCategories.length === 0 ? (
+          <div style={{ gridColumn:'1/-1', textAlign:'center', padding:'60px', color:'rgba(45,45,45,0.55)' }}>No categories found.</div>
+        ) : filteredCategories.map(cat => (
           <div key={cat.id} style={{ background:'#F9F6F2', borderRadius:'12px', overflow:'hidden', border:'1px solid #E8DFD5' }}>
             <div style={{ height:'140px', background:'#E8DFD5', overflow:'hidden' }}>
               {cat.imageUrl ? <img src={cat.imageUrl} alt={cat.name} style={{ width:'100%', height:'100%', objectFit:'cover', opacity:0.8 }} /> : <div style={{ width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center', fontSize:'40px' }}>🏆</div>}

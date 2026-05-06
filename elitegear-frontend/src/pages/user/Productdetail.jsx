@@ -82,7 +82,7 @@ export default function ProductDetail() {
       {/* Breadcrumb */}
       <div className="naturalist" style={{ padding: '16px 0' }}>
         <div className="max-w-eg px-eg mx-auto flex items-center gap-2">
-          {['HOME', product.category?.toUpperCase() || 'PRODUCTS', product.name.toUpperCase()].map((crumb, i, arr) => (
+          {['HOME', product.category || 'PRODUCTS', product.name].map((crumb, i, arr) => (
             <span key={i} className="flex items-center gap-2">
               <span className="label cursor-pointer"
                 style={{ color: i === arr.length - 1 ? 'var(--carbon)' : 'var(--text-muted-light)', fontSize: '10px' }}
@@ -115,14 +115,20 @@ export default function ProductDetail() {
               </span>
               
               <h1 className="display-md mb-2" style={{ color: 'var(--oat-milk)', marginTop: '12px', fontSize: '40px' }}>
-                {product.name.toUpperCase()}
+                {product.name}
               </h1>
 
               <div className="flex items-center gap-4 mb-5">
-                <span className="font-bold" style={{ color: 'var(--oat-milk)', fontSize: '28px' }}>
-                  Rs. {Number(product.offerPrice || product.price).toLocaleString()}
-                </span>
-                {product.offerPrice && (
+                {product.offerPrice > 0 && product.offerPrice < product.price ? (
+                  <span className="font-bold" style={{ color: 'var(--oat-milk)', fontSize: '28px' }}>
+                    Rs. {Number(product.offerPrice).toLocaleString()}
+                  </span>
+                ) : (
+                  <span className="font-bold" style={{ color: 'var(--oat-milk)', fontSize: '28px' }}>
+                    Rs. {Number(product.price).toLocaleString()}
+                  </span>
+                )}
+                {product.offerPrice > 0 && product.offerPrice < product.price && (
                   <span style={{ color: '#ef4444', textDecoration: 'line-through', fontSize: '14px', opacity: 0.85 }}>
                     Rs. {Number(product.price).toLocaleString()}
                   </span>

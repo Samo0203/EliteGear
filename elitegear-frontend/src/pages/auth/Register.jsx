@@ -210,14 +210,14 @@ export default function Register() {
             <button type="submit" disabled={loading}
               className="w-full btn-primary"
               style={{
-                background: 'linear-gradient(135deg, #A7D1AB, #3A5F41)',
+                background: ' #3A5F41',
                 padding: '18px',
                 fontSize: '13px',
                 letterSpacing: '0.08em',
                 borderRadius: '8px',
                 opacity: loading ? 0.7 : 1,
               }}>
-              {loading ? 'CREATING ACCOUNT...' : 'REGISTER ACCESS'}
+              {loading ? 'CREATING ACCOUNT...' : 'REGISTER'}
             </button>
 
             {/* Login link */}
@@ -225,7 +225,7 @@ export default function Register() {
               ALREADY REGISTERED?{' '}
               <Link to="/login"
                 style={{ color: 'var(--carbon)', fontWeight: 700, textDecoration: 'underline' }}>
-                LOGIN TO VAULT
+                LOGIN
               </Link>
             </p>
           </form>

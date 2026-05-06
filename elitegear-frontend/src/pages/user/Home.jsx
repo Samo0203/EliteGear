@@ -213,7 +213,7 @@ export default function Home() {
                     </div>
                   )}
                   <div className="mt-2">
-                    {product.offerPrice && product.offerPrice < product.price ? (
+                    {product.offerPrice > 0 && product.offerPrice < product.price ? (
                       <div className="flex items-center gap-2">
                         <span className="font-bold" style={{ color: 'var(--carbon)', fontSize: '15px' }}>
                           Rs. {Number(product.offerPrice).toLocaleString()}
@@ -223,7 +223,7 @@ export default function Home() {
                         </span>
                       </div>
                     ) : (
-                      <p className="font-bold" style={{ color: 'var(--primary)', fontSize: '15px' }}>
+                      <p className="font-bold" style={{ color: '#2fdb65', fontSize: '15px' }}>
                         Rs. {Number(product.price).toLocaleString()}
                       </p>
                     )}
@@ -291,7 +291,7 @@ export default function Home() {
                     </div>
                   )}
                   <div className="mt-1">
-                    {product.offerPrice && product.offerPrice < product.price ? (
+                    {product.offerPrice > 0 && product.offerPrice < product.price ? (
                       <div className="flex items-center gap-2">
                         <span className="font-bold" style={{ color: 'var(--carbon)', fontSize: '13px' }}>
                           Rs. {Number(product.offerPrice).toLocaleString()}
@@ -301,7 +301,7 @@ export default function Home() {
                         </span>
                       </div>
                     ) : (
-                      <p className="font-bold" style={{ color: 'var(--primary)', fontSize: '13px' }}>
+                      <p className="font-bold" style={{ color: '#2fdb65', fontSize: '13px' }}>
                         Rs. {Number(product.price).toLocaleString()}
                       </p>
                     )}

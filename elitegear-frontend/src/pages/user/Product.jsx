@@ -55,7 +55,9 @@ export default function Products() {
 
   /* Filter logic */
   const filtered = displayProducts.filter(p => {
-    const matchSearch   = !filters.search   || p.name.toLowerCase().includes(filters.search.toLowerCase());
+    const matchSearch   = !filters.search   || 
+      p.name.toLowerCase().includes(filters.search.toLowerCase()) ||
+      p.category.toLowerCase().includes(filters.search.toLowerCase());
     const matchCategory = !filters.category || p.category === filters.category;
     const matchPrice    = p.price >= filters.minPrice && p.price <= filters.maxPrice;
     return matchSearch && matchCategory && matchPrice;
@@ -85,11 +87,11 @@ export default function Products() {
           <h1 className="display-lg mb-4" style={{ color: 'var(--linen)', marginTop: 0 }}>
             All Equipment
           </h1>
-          <p className="body-sm" style={{ color: 'rgba(45,45,45,0.5)', maxWidth: '440px' }}>
+          <p className="body-sm" style={{ color: 'rgba(204, 203, 203, 0.5)', maxWidth: '440px' }}>
             Performance engineered for the modern athlete. Discover tools that bridge the gap between biological potential and architectural precision.
           </p>
           <div className="flex items-center gap-3 mt-6">
-            <div className="chip chip-outline flex items-center gap-2">
+            <div className="chip chip-outline flex items-center gap-2"  style={{ color: 'rgb(226, 223, 223)' }}>
               <SlidersHorizontal size={13} />
               DISPLAYING {filtered.length} ARTIFACTS
             </div>
@@ -203,12 +205,12 @@ export default function Products() {
                         <p className="font-semibold truncate" style={{ color: 'var(--carbon)', fontSize: '14px' }}>
                           {product.name}
                         </p>
-                        <p className="label mt-1 truncate" style={{ color: 'rgba(45,45,45,0.55)', fontSize: '10px' }}>
+                        <p className="mt-1 truncate" style={{ color: 'rgba(45,45,45,0.55)', fontSize: '10px', fontWeight: 500, letterSpacing: '0.05em' }}>
                           {product.description || product.category}
                         </p>
                       </div>
                       <div className="flex-shrink-0">
-                        {product.offerPrice && product.offerPrice < product.price ? (
+                        {product.offerPrice > 0 && product.offerPrice < product.price ? (
                           <div className="flex items-center gap-2">
                             <span className="font-bold" style={{ color: 'var(--carbon)', fontSize: '14px' }}>
                               Rs. {Number(product.offerPrice).toLocaleString()}
