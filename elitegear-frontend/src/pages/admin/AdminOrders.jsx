@@ -6,10 +6,16 @@ export function AdminOrders() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [viewOrder, setViewOrder] = useState(null);
+  const [search, setSearch] = useState('');
 
   const fetchOrders = async () => {
     setLoading(true);
-    try { const res = await orderAPI.getAll(); setOrders(res.data); }
+    try { 
+      const res = await orderAPI.getAll(); 
+      // Sort orders by createdAt in descending order (latest first)
+      const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setOrders(sortedOrders); 
+    }
     catch {} finally { setLoading(false); }
   };
 
@@ -32,6 +38,12 @@ export function AdminOrders() {
     return user ? user.name : userId || '—';
   };
 
+  const filteredOrders = orders.filter(order =>
+    order.id.toLowerCase().includes(search.toLowerCase()) ||
+    getUserName(order.userId).toLowerCase().includes(search.toLowerCase()) ||
+    order.status.toLowerCase().includes(search.toLowerCase())
+  );
+
   const STATUS_COLORS = {
     PENDING:    { bg:'rgba(245,158,11,0.15)', text:'#f59e0b' },
     PROCESSING: { bg:'rgba(96,165,250,0.15)', text:'#60a5fa' },
@@ -46,6 +58,17 @@ export function AdminOrders() {
       <div style={{ marginBottom:'32px' }}>
         <p style={{ fontSize:'10px', letterSpacing:'0.08em', textTransform:'uppercase', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>MANAGEMENT</p>
         <h1 style={{ fontSize:'24px', fontWeight:700, color:'var(--carbon)' }}>Orders</h1>
+      </div>
+
+      {/* Search Bar */}
+      <div style={{ marginBottom:'24px' }}>
+        <input
+          type="text"
+          placeholder="Search orders by ID, customer name, or status..."
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          style={{ width:'100%', padding:'12px 14px', background:'white', border:'1px solid #DDD3CA', borderRadius:'8px', fontSize:'13px', fontFamily:"'Lexend',sans-serif", color:'var(--carbon)', outline:'none' }}
+        />
       </div>
 
       <div style={{ background:'#F9F6F2', borderRadius:'12px', overflow:'hidden' }}>
@@ -65,7 +88,7 @@ export function AdminOrders() {
               </tr>
             </thead>
             <tbody>
-              {orders.map(order => {
+              {filteredOrders.map(order => {
                 const sc = STATUS_COLORS[order.status] || STATUS_COLORS.PENDING;
                 return (
                   <tr key={order.id} style={{ borderTop:'1px solid #E8DFD5' }}

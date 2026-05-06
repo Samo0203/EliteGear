@@ -24,7 +24,9 @@ export default function MyOrders() {
   const fetchOrders = async () => {
     try {
       const res = await orderAPI.getByUser(user.id);
-      setOrders(res.data);
+      // Sort orders by createdAt in descending order (latest first)
+      const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      setOrders(sortedOrders);
     } catch (err) {
       setError('Failed to load orders');
     } finally {

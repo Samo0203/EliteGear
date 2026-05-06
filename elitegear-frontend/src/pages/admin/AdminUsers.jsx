@@ -188,7 +188,7 @@ export function ViewUserModal({ user, onClose }) {
         </div>
 
         <div style={{ display:'flex', justifyContent:'flex-end', marginTop:'24px' }}>
-          <button onClick={onClose} style={{ padding:'12px 24px', background:'var(--surface-high)', border:'none', borderRadius:'8px', color:'var(--linen)', cursor:'pointer', fontFamily:"'Lexend',sans-serif", fontSize:'12px' }}>
+          <button onClick={onClose} style={{ padding:'12px 24px', background:'var(--surface-high)', border:'none', borderRadius:'8px', color:'var(--black)', cursor:'pointer', fontFamily:"'Lexend',sans-serif", fontSize:'12px' }}>
             Close
           </button>
         </div>
