@@ -84,7 +84,7 @@ export default function MyOrders() {
               <p className="body-sm mb-8" style={{ color: 'var(--text-muted-light)' }}>
                 Start shopping to see your orders here.
               </p>
-              <button onClick={() => navigate('/')} className="btn-primary">
+              <button onClick={() => navigate('/products')} className="btn-primary">
                 Start Shopping
               </button>
             </div>

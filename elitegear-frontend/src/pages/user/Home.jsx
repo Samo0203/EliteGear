@@ -155,11 +155,11 @@ export default function Home() {
                   Apex Pro<br />Series Bat
                 </h3>
                 <div className="flex items-center gap-3 mb-6">
-                  <span className="font-bold text-xl" style={{ color: 'var(--oat-milk)' }}>Rs. 49,900</span>
-                  <span style={{ color: 'rgba(241,237,227,0.5)', textDecoration: 'line-through', fontSize: '14px' }}>Rs. 75,000</span>
+                  <span className="font-bold text-xl" style={{ color: 'var(--oat-milk)' }}>Rs. 4,900</span>
+                  <span style={{ color: 'rgba(241,237,227,0.5)', textDecoration: 'line-through', fontSize: '14px' }}>Rs. 7,500</span>
                 </div>
                 <button className="btn-secondary" style={{ padding: '12px 24px', fontSize: '12px' }}
-                  onClick={() => navigate('/products')}>
+                  onClick={() => navigate('/products/69f0a0bbf75a159c5b21b576')}>
                   Claim Offer
                 </button>
               </div>
@@ -277,7 +277,7 @@ export default function Home() {
                   </button>
                 </div>
                 <div style={{ padding: '12px' }}>
-                  <p className="font-semibold truncate" style={{ color: 'var(--oat-milk)', fontSize: '12px' }}>{product.name}</p>
+                  <p className="font-semibold truncate" style={{ color: 'var(--carbon)', fontSize: '12px' }}>{product.name}</p>
                   {product.weights?.length > 0 && (
                     <div className="flex flex-wrap gap-1 mt-1">
                       {product.weights.slice(0, 2).map((weight, i) => (
