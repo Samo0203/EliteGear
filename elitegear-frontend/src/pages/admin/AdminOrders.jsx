@@ -157,17 +157,59 @@ export function AdminOrders() {
                 </div>
               </div>
               
-              <div>
-                <label style={{ display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>Items</label>
-                <div style={{ background:'white', border:'1px solid #DDD3CA', color:'var(--carbon)', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px' }}>
-                  {viewOrder.items?.length || 0} item(s)
+              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px' }}>
+                <div>
+                  <label style={{ display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>Items</label>
+                  <div style={{ background:'white', border:'1px solid #DDD3CA', color:'var(--carbon)', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px' }}>
+                    {viewOrder.items?.length || 0} item(s)
+                  </div>
+                </div>
+                <div>
+                  <label style={{ display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>Total</label>
+                  <div style={{ background:'white', border:'1px solid #DDD3CA', color:'var(--carbon)', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px' }}>
+                    Rs. {Number(viewOrder.total||0).toLocaleString()}
+                  </div>
                 </div>
               </div>
               
+              {/* Recipient Information */}
               <div>
-                <label style={{ display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>Total</label>
-                <div style={{ background:'white', border:'1px solid #DDD3CA', color:'var(--carbon)', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px' }}>
-                  Rs. {Number(viewOrder.total||0).toLocaleString()}
+                <label style={{ display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>Recipient Information</label>
+                <div style={{ background:'white', border:'1px solid #DDD3CA', borderRadius:'8px', padding:'16px' }}>
+                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'12px' }}>
+                    <div>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Full Name:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.fullName || '—'}</p>
+                    </div>
+                    <div>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Phone:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.phone || '—'}</p>
+                    </div>
+                    <div style={{ gridColumn:'1 / -1' }}>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Street Address:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.streetAddress || '—'}</p>
+                    </div>
+                    <div>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>City:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.city || '—'}</p>
+                    </div>
+                    <div>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Zip Code:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.zipCode || '—'}</p>
+                    </div>
+                    <div style={{ gridColumn:'1 / -1' }}>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Detailed Address:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.detailedAddress || '—'}</p>
+                    </div>
+                    <div>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Preferred Date:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.preferredDate ? new Date(viewOrder.recipient.preferredDate).toLocaleDateString() : '—'}</p>
+                    </div>
+                    <div style={{ gridColumn:'1 / -1' }}>
+                      <span style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', fontWeight:500 }}>Special Instructions:</span>
+                      <p style={{ fontSize:'13px', color:'var(--carbon)', margin:'4px 0 0 0' }}>{viewOrder.recipient?.specialInstructions || '—'}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
               
@@ -176,12 +218,31 @@ export function AdminOrders() {
                   <label style={{ display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' }}>Order Items</label>
                   <div style={{ background:'white', border:'1px solid #DDD3CA', borderRadius:'8px', padding:'16px' }}>
                     {viewOrder.items.map((item, i) => (
-                      <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'8px 0', borderBottom: i < viewOrder.items.length - 1 ? '1px solid #E8DFD5' : 'none' }}>
-                        <div>
-                          <p style={{ fontSize:'13px', color:'var(--carbon)', margin:0 }}>{item.name}</p>
-                          <p style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', margin:'2px 0 0 0' }}>Qty: {item.quantity}</p>
+                      <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', padding:'12px 0', borderBottom: i < viewOrder.items.length - 1 ? '1px solid #E8DFD5' : 'none' }}>
+                        <div style={{ flex:1 }}>
+                          <p style={{ fontSize:'14px', color:'var(--carbon)', margin:0, fontWeight:500 }}>{item.name}</p>
+                          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(120px, 1fr))', gap:'8px', marginTop:'8px' }}>
+                            <p style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', margin:0 }}>
+                              <span style={{ fontWeight:500 }}>Qty:</span> {item.quantity}
+                            </p>
+                            {item.color && (
+                              <p style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', margin:0 }}>
+                                <span style={{ fontWeight:500 }}>Color:</span> {item.color}
+                              </p>
+                            )}
+                            {item.size && (
+                              <p style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', margin:0 }}>
+                                <span style={{ fontWeight:500 }}>Size:</span> {item.size}
+                              </p>
+                            )}
+                            {item.weight && (
+                              <p style={{ fontSize:'11px', color:'rgba(45,45,45,0.55)', margin:0 }}>
+                                <span style={{ fontWeight:500 }}>Weight:</span> {item.weight}
+                              </p>
+                            )}
+                          </div>
                         </div>
-                        <p style={{ fontSize:'13px', color:'var(--carbon)', margin:0 }}>Rs. {Number(item.price * item.quantity).toLocaleString()}</p>
+                        <p style={{ fontSize:'14px', color:'var(--carbon)', margin:0, fontWeight:600 }}>Rs. {Number(item.price * item.quantity).toLocaleString()}</p>
                       </div>
                     ))}
                   </div>

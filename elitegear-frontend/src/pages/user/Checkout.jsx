@@ -60,7 +60,16 @@ export default function Checkout() {
     try {
       await orderAPI.create({
         userId: user.id,
-        items: cart.map(i => ({ productId: i.id, name: i.name, price: i.price, quantity: i.quantity, imageUrl: i.imageUrl })),
+        items: cart.map(i => ({ 
+          productId: i.id, 
+          name: i.name, 
+          price: i.price, 
+          quantity: i.quantity, 
+          imageUrl: i.imageUrl,
+          color: i.color,
+          size: i.size,
+          weight: i.weight
+        })),
         total: TOTAL,
         status: 'PENDING',
         recipient: form,

@@ -23,7 +23,7 @@ export default function Products() {
     search:    searchQ,
     category:  '',
     minPrice:  0,
-    maxPrice:  200000,
+    maxPrice:  25000,
   });
 
   useEffect(() => {
@@ -144,7 +144,7 @@ export default function Products() {
           {/* Price Range */}
           <div className="mb-8">
             <label className="label mb-3 block" style={{ color: 'rgba(45,45,45,0.55)' }}>PRICE RANGE</label>
-            <input type="range" min={0} max={200000} step={1000}
+            <input type="range" min={0} max={25000} step={1000}
               value={filters.maxPrice}
               onChange={e => { setFilters({ ...filters, maxPrice: +e.target.value }); setPage(1); }}
               style={{ width: '100%', accentColor: 'var(--leaf)' }} />
