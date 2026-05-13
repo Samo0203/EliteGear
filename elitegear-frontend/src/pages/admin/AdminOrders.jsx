@@ -12,7 +12,7 @@ export function AdminOrders() {
     setLoading(true);
     try { 
       const res = await orderAPI.getAll(); 
-      // Sort orders by createdAt in descending order (latest first)
+      // Sort orders in descending order
       const sortedOrders = res.data.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       setOrders(sortedOrders); 
     }

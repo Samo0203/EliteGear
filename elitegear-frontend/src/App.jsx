@@ -1,11 +1,11 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
-// Auth pages
+// Auth 
 import Login    from './pages/auth/Login';
 import Register from './pages/auth/Register';
 
-// User pages
+// User 
 import Home          from './pages/user/Home';
 import Products      from './pages/user/Product';
 import Category      from './pages/user/Category';
@@ -23,7 +23,7 @@ import { AdminCategories } from './pages/admin/AdminCategories';
 import { AdminOrders } from './pages/admin/AdminOrders';
 import { AdminUsers } from './pages/admin/AdminUsers';
 
-/* ── Route Guards ── */
+/*  Route Guards  */
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
   if (loading) return (
@@ -54,23 +54,23 @@ function App() {
     <AuthProvider>
       <Router>
         <Routes>
-          {/* ── Public ── */}
+          {/*  Public  */}
           <Route path="/"          element={<Home />} />
           <Route path="/products"  element={<Products />} />
           <Route path="/products/:id" element={<ProductDetail />} />
           <Route path="/category"  element={<Category />} />
 
-          {/* ── Auth ── */}
+          {/*  Auth  */}
           <Route path="/login"    element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
           <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
 
-          {/* ── User Protected ── */}
+          {/*  User Protected  */}
           <Route path="/profile"  element={<ProtectedRoute><Profile /></ProtectedRoute>} />
           <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
           <Route path="/orders"   element={<ProtectedRoute><MyOrders /></ProtectedRoute>} />
           <Route path="/orders/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
 
-          {/* ── Admin Protected ── */}
+          {/*  Admin Protected  */}
           <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
             <Route index              element={<Dashboard />} />
             <Route path="products"   element={<AdminProducts />} />
@@ -79,7 +79,7 @@ function App() {
             <Route path="users"      element={<AdminUsers />} />
           </Route>
 
-          {/* ── Fallback ── */}
+          {/*  Fallback  */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>

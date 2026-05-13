@@ -3,44 +3,44 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ============================================================
+/*
    ELITEGEAR — DESIGN SYSTEM: "THE ARCHITECTURAL NATURALIST"
-   ============================================================ */
+*/
 
 :root {
-  /* SURFACES - LIGHT THEME */
+  
   --surface:           #F5F0E8;
   --surface-low:       #F9F6F2;
   --surface-high:      #E8DFD5;
   --surface-highest:   #DDD3CA;
   --carbon:            #2D2D2D;
 
-  /* LIGHT SURFACES */
+  
   --oat-milk:          #F5F0E8;
   --linen:             #F9F6F2;
   --black:             #000000;
 
-  /* TEXT */
+  
   --text-on-dark:      #F5F0E8;
   --text-on-light:     #2D2D2D;
   --text-muted-dark:   rgba(45, 45, 45, 0.55);
   --text-muted-light:  rgba(45, 45, 45, 0.55);
 
-  /* ACCENT */
+  
   --primary:           #A7D1AB;
   --primary-container: #3A5F41;
   --leaf:              #3A5F41;
   --leaf-light:        #A7D1AB;
 
-  /* GLASS */
+  
   --glass-bg:          rgba(249, 246, 242, 0.60);
   --ghost-border:      rgba(45, 45, 45, 0.12);
   --ghost-border-focus: #A7D1AB;
 
-  /* SHADOWS */
+  
   --shadow-ambient:    rgba(45, 45, 45, 0.06);
 
-  /* SPACING */
+  
   --space-xs:  8px;
   --space-sm:  16px;
   --space-md:  24px;
@@ -72,9 +72,9 @@ body {
   line-height: 1.6;
 }
 
-/* ============================================================
-   SECTION COMBOS (The 5 Permitted Combinations)
-   ============================================================ */
+/*
+   SECTIONS
+*/
 .noir        { background: #000000;  color: #F9F6F2; }
 .naturalist  { background: #F5F0E8;  color: #2D2D2D; }
 .technical   { background: #2D2D2D;  color: #F1EDE3; }
@@ -83,9 +83,9 @@ body {
 .carbon-bg   { background: #2D2D2D;  color: #F5F0E8; }
 .leaf-bg     { background: #3A5F41;  color: #F5F0E8; }
 
-/* ============================================================
+/*
    TYPOGRAPHY SCALE
-   ============================================================ */
+ */
 .display-xl {
   font-size: clamp(56px, 9vw, 108px);
   font-weight: 800;
@@ -119,9 +119,7 @@ body {
   letter-spacing: 0.05em;
 }
 
-/* ============================================================
-   BUTTONS
-   ============================================================ */
+
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -191,9 +189,7 @@ body {
 }
 .btn-ghost:hover { text-decoration: underline; color: var(--primary); }
 
-/* ============================================================
-   INPUTS
-   ============================================================ */
+
 .input-dark {
   width: 100%;
   background: #FFFFFF;
@@ -226,9 +222,6 @@ body {
 .input-light::placeholder { color: var(--text-muted-light); }
 .input-light:focus { border-color: var(--leaf); }
 
-/* ============================================================
-   GLASS NAV
-   ============================================================ */
 .glass-nav {
   background: var(--glass-bg);
   backdrop-filter: blur(20px);
@@ -236,9 +229,6 @@ body {
   border-bottom: 1px solid var(--ghost-border);
 }
 
-/* ============================================================
-   CARDS
-   ============================================================ */
 .card-technical {
   background: var(--carbon);
   color: var(--oat-milk);
@@ -252,9 +242,6 @@ body {
   padding: 24px;
 }
 
-/* ============================================================
-   PRODUCT CARDS
-   ============================================================ */
 .product-card {
   background: #F9F6F2;
   border-radius: var(--radius-lg);
@@ -265,9 +252,6 @@ body {
 }
 .product-card:hover { transform: translateY(-4px); }
 
-/* ============================================================
-   EDITORIAL CHIP / BADGE
-   ============================================================ */
 .chip {
   display: inline-flex;
   align-items: center;
@@ -290,17 +274,11 @@ body {
   border: 1px solid var(--carbon);
 }
 
-/* ============================================================
-   SCROLLBAR
-   ============================================================ */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--surface); }
 ::-webkit-scrollbar-thumb { background: var(--surface-high); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--leaf); }
 
-/* ============================================================
-   ANIMATIONS
-   ============================================================ */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(24px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -325,9 +303,6 @@ body {
 .stagger > *:nth-child(4) { animation-delay: 0.3s; }
 .stagger > *:nth-child(5) { animation-delay: 0.4s; }
 
-/* ============================================================
-   ADMIN SIDEBAR
-   ============================================================ */
 .admin-sidebar {
   background: #2D2D2D;
   width: var(--sidebar-width);
@@ -344,9 +319,6 @@ body {
   background: var(--surface);
 }
 
-/* ============================================================
-   UTILITIES
-   ============================================================ */
 .max-w-eg { max-width: var(--max-width); margin: 0 auto; }
 .px-eg    { padding-left: 40px; padding-right: 40px; }
 

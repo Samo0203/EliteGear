@@ -25,7 +25,7 @@ export function AdminCategories() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check if category already exists (exclude current editing category)
+    // Check if category already exists
     const existingCategory = categories.find(cat => 
       cat.name.toLowerCase().trim() === form.name.toLowerCase().trim() &&
       (!editing || cat.id !== editing.id)
