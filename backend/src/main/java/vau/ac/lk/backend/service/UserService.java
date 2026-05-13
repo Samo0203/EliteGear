@@ -23,6 +23,9 @@ public class UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Email already registered");
         }
+        if (userRepository.existsByNic(user.getNic())) {
+            throw new RuntimeException("NIC already registered");
+        }
 
         // Hash password before saving
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -68,6 +71,12 @@ public class UserService {
             throw new RuntimeException("Username already taken");
         }
 
+        if (updatedUser.getNic() != null
+                && !updatedUser.getNic().equals(existing.getNic())
+                && userRepository.existsByNic(updatedUser.getNic())) {
+            throw new RuntimeException("NIC already registered");
+        }
+
         if (updatedUser.getName() != null) existing.setName(updatedUser.getName());
         if (updatedUser.getEmail() != null) existing.setEmail(updatedUser.getEmail());
         if (updatedUser.getMobile() != null) existing.setMobile(updatedUser.getMobile());
@@ -80,5 +89,18 @@ public class UserService {
         }
 
         return userRepository.save(existing);
+    }
+
+    // ── Helpers ───────────────────────────────────────────────────────────────
+    public boolean existsUsername(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public boolean existsEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    public boolean existsNic(String nic) {
+        return userRepository.existsByNic(nic);
     }
 }

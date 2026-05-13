@@ -30,8 +30,20 @@ public class UserController {
     @Data @NoArgsConstructor @AllArgsConstructor
     public static class LoginResponse {
         private boolean success;
-        private User    user;     // password field is WRITE_ONLY — won't appear in JSON
+        private User    user;
         private String  message;
+    }
+
+    @Data @NoArgsConstructor @AllArgsConstructor
+    public static class CheckFieldRequest {
+        private String username;
+        private String email;
+        private String nic;
+    }
+
+    @Data @NoArgsConstructor @AllArgsConstructor
+    public static class CheckAvailabilityResponse {
+        private boolean available;
     }
 
     // ── Endpoints ─────────────────────────────────────────────────────────────
@@ -44,6 +56,24 @@ public class UserController {
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
+    }
+
+    @PostMapping("/check-username")
+    public ResponseEntity<CheckAvailabilityResponse> checkUsername(@RequestBody CheckFieldRequest req) {
+        boolean available = !userService.existsUsername(req.getUsername());
+        return ResponseEntity.ok(new CheckAvailabilityResponse(available));
+    }
+
+    @PostMapping("/check-email")
+    public ResponseEntity<CheckAvailabilityResponse> checkEmail(@RequestBody CheckFieldRequest req) {
+        boolean available = !userService.existsEmail(req.getEmail());
+        return ResponseEntity.ok(new CheckAvailabilityResponse(available));
+    }
+
+    @PostMapping("/check-nic")
+    public ResponseEntity<CheckAvailabilityResponse> checkNic(@RequestBody CheckFieldRequest req) {
+        boolean available = !userService.existsNic(req.getNic());
+        return ResponseEntity.ok(new CheckAvailabilityResponse(available));
     }
 
     @PostMapping("/login")
