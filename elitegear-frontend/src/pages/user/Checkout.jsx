@@ -20,6 +20,7 @@ export default function Checkout() {
     detailedAddress: '',
     specialInstructions: '',
   });
+  const [errors, setErrors] = useState({});
   const [loading,  setLoading]  = useState(false);
   const [success,  setSuccess]  = useState(false);
   const [error,    setError]    = useState('');
@@ -27,13 +28,40 @@ export default function Checkout() {
   const DISCOUNT = Math.round(cartTotal * 0.1);
   const TOTAL    = cartTotal - DISCOUNT;
 
-  const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
+  const phoneRegex = /^\+\d{11}$/;
+  const zipRegex = /^\d{5}$/;
+
+  const validateCheckout = () => {
+    const nextErrors = {};
+    if (!form.fullName.trim()) nextErrors.fullName = 'Full name is required.';
+    if (!form.streetAddress.trim()) nextErrors.streetAddress = 'Street address is required.';
+    if (!form.zipCode.trim()) nextErrors.zipCode = 'Zip code is required.';
+    else if (!zipRegex.test(form.zipCode.trim())) nextErrors.zipCode = 'Zip code must be exactly 5 digits.';
+    if (!form.city.trim()) nextErrors.city = 'City is required.';
+    if (!form.phone.trim()) nextErrors.phone = 'Phone number is required.';
+    else if (!phoneRegex.test(form.phone.trim())) nextErrors.phone = 'Phone number must start with + and contain exactly 11 digits.';
+    if (!form.preferredDate) nextErrors.preferredDate = 'Preferred date is required.';
+    return nextErrors;
+  };
+
+  const set = (field) => (e) => {
+    setForm({ ...form, [field]: e.target.value });
+    setErrors(prev => ({ ...prev, [field]: undefined }));
+    setError('');
+  };
 
   const handleConfirm = async (e) => {
     e.preventDefault();
     if (!user)         { navigate('/login'); return; }
     if (!user.id)      { setError('User session invalid. Please login again.'); return; }
     if (cart.length === 0) { navigate('/products'); return; }
+
+    const nextErrors = validateCheckout();
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      setError('Please correct the highlighted fields.');
+      return;
+    }
 
     // Validate stock
     for (const item of cart) {
@@ -112,6 +140,14 @@ export default function Checkout() {
     marginBottom: '8px',
   };
 
+  const fieldStyle = (field) => ({
+    ...inputStyle,
+    borderColor: errors[field] ? '#ef4444' : 'rgba(45,45,45,0.15)',
+  });
+
+  const focusStyle = (e) => { e.target.style.borderColor = 'var(--leaf)'; };
+  const blurStyle = (field) => (e) => { e.target.style.borderColor = errors[field] ? '#ef4444' : 'rgba(45,45,45,0.15)'; };
+
   if (success) return (
     <div style={{ background: '#F5F3F0', minHeight: '100vh', fontFamily: "'Lexend',sans-serif" }}>
       <Navbar />
@@ -164,40 +200,45 @@ export default function Checkout() {
                   style={{ background: 'rgba(241,237,227,0.6)' }}>
                   <div>
                     <label style={labelStyle}>Full Name</label>
-                    <input style={inputStyle} placeholder="e.g. Julian Amsel"
+                    <input style={fieldStyle('fullName')} placeholder="e.g. Julian Amsel"
                       value={form.fullName} onChange={set('fullName')} required
-                      onFocus={e => e.target.style.borderColor = 'var(--leaf)'}
-                      onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                      onFocus={focusStyle}
+                      onBlur={blurStyle('fullName')} />
+                    {errors.fullName && <p className="text-red-600 text-xs mt-2">{errors.fullName}</p>}
                   </div>
                   <div>
                     <label style={labelStyle}>Street Address</label>
-                    <input style={inputStyle} placeholder="123 Performance Way"
+                    <input style={fieldStyle('streetAddress')} placeholder="123 Performance Way"
                       value={form.streetAddress} onChange={set('streetAddress')} required
-                      onFocus={e => e.target.style.borderColor = 'var(--leaf)'}
-                      onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                      onFocus={focusStyle}
+                      onBlur={blurStyle('streetAddress')} />
+                    {errors.streetAddress && <p className="text-red-600 text-xs mt-2">{errors.streetAddress}</p>}
                   </div>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label style={labelStyle}>Zip Code</label>
-                      <input style={inputStyle} placeholder="10001"
+                      <input style={fieldStyle('zipCode')} placeholder="10001"
                         value={form.zipCode} onChange={set('zipCode')} required
-                        onFocus={e => e.target.style.borderColor = 'var(--leaf)'}
-                        onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                        onFocus={focusStyle}
+                        onBlur={blurStyle('zipCode')} />
+                    {errors.zipCode && <p className="text-red-600 text-xs mt-2">{errors.zipCode}</p>}
                     </div>
                     <div>
                       <label style={labelStyle}>City</label>
-                      <input style={inputStyle} placeholder="Colombo"
+                      <input style={fieldStyle('city')} placeholder="Colombo"
                         value={form.city} onChange={set('city')} required
-                        onFocus={e => e.target.style.borderColor = 'var(--leaf)'}
-                        onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                        onFocus={focusStyle}
+                        onBlur={blurStyle('city')} />
+                      {errors.city && <p className="text-red-600 text-xs mt-2">{errors.city}</p>}
                     </div>
                   </div>
                   <div>
                     <label style={labelStyle}>Phone</label>
-                    <input style={inputStyle} type="tel" placeholder="+94 77 000 0000"
+                    <input style={fieldStyle('phone')} type="tel" placeholder="+94 77 000 0000"
                       value={form.phone} onChange={set('phone')} required
-                      onFocus={e => e.target.style.borderColor = 'var(--leaf)'}
-                      onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                      onFocus={focusStyle}
+                      onBlur={blurStyle('phone')} />
+                    {errors.phone && <p className="text-red-600 text-xs mt-2">{errors.phone}</p>}
                   </div>
                 </div>
               </div>
@@ -219,9 +260,10 @@ export default function Checkout() {
                     <label style={labelStyle}>Preferred Date</label>
                     <input style={inputStyle} type="date"
                       min={new Date().toISOString().split('T')[0]}
-                      value={form.preferredDate} onChange={set('preferredDate')}
+                      value={form.preferredDate} onChange={set('preferredDate')} required
                       onFocus={e => e.target.style.borderColor = 'var(--leaf)'}
                       onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                    {errors.preferredDate && <p className="text-red-600 text-xs mt-2">{errors.preferredDate}</p>}
                   </div>
                   <div>
                     <label style={labelStyle}>Detailed Address</label>

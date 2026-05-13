@@ -30,6 +30,8 @@ public class User {
 
     private String mobile;
     private String region;
+
+    @Indexed(unique = true)
     private String nic;        
     private String avatarUrl;
 

@@ -10,20 +10,98 @@ export default function Register() {
     name: '', username: '', email: '', mobile: '',
     nic: '', region: '', password: '', confirmPassword: ''
   });
-  const [error,   setError]   = useState('');
+  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const set = (field) => (e) => setForm({ ...form, [field]: e.target.value });
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^\+\d{10}$/;
+
+  const checkUsernameUnique = async (username) => {
+    if (!username.trim()) return true;
+    try {
+      const res = await fetch('/eg/check-username', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username.trim() })
+      });
+      const data = await res.json();
+      return data.available;
+    } catch (err) {
+      return true;
+    }
+  };
+
+  const checkEmailUnique = async (email) => {
+    if (!email.trim()) return true;
+    try {
+      const res = await fetch('/eg/check-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim() })
+      });
+      const data = await res.json();
+      return data.available;
+    } catch (err) {
+      return true;
+    }
+  };
+
+  const checkNicUnique = async (nic) => {
+    if (!nic.trim()) return true;
+    try {
+      const res = await fetch('/eg/check-nic', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nic: nic.trim() })
+      });
+      const data = await res.json();
+      return data.available;
+    } catch (err) {
+      return true;
+    }
+  };
+
+  const validateRegister = async () => {
+    const nextErrors = {};
+    if (!form.name.trim()) nextErrors.name = 'Full name is required.';
+    if (!form.username.trim()) nextErrors.username = 'Username is required.';
+    else if (!(await checkUsernameUnique(form.username.trim()))) nextErrors.username = 'Username already taken.';
+    if (!form.email.trim()) nextErrors.email = 'Email is required.';
+    else if (!emailRegex.test(form.email.trim())) nextErrors.email = 'Enter a valid email address.';
+    else if (!(await checkEmailUnique(form.email.trim()))) nextErrors.email = 'Email already registered.';
+    if (!form.mobile.trim()) nextErrors.mobile = 'Mobile number is required.';
+    else if (!phoneRegex.test(form.mobile.trim())) nextErrors.mobile = 'Mobile number must start with + and contain exactly 10 digits.';
+    const nic = form.nic.trim();
+    if (!nic) nextErrors.nic = 'NIC is required.';
+    else if (nic.length < 10 || nic.length > 12) nextErrors.nic = 'NIC must be between 10 and 12 characters.';
+    else if (!(await checkNicUnique(nic))) nextErrors.nic = 'NIC already registered.';
+    if (!form.region) nextErrors.region = 'Region is required.';
+    if (!form.password) nextErrors.password = 'Password is required.';
+    else if (form.password.length < 6) nextErrors.password = 'Password must be at least 6 characters.';
+    if (!form.confirmPassword) nextErrors.confirmPassword = 'Confirm password is required.';
+    else if (form.password !== form.confirmPassword) nextErrors.confirmPassword = 'Passwords do not match.';
+    return nextErrors;
+  };
+
+  const set = (field) => (e) => {
+    setForm({ ...form, [field]: e.target.value });
+    setErrors(prev => ({ ...prev, [field]: undefined }));
+    setError('');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    if (form.password !== form.confirmPassword) { setError('Passwords do not match'); return; }
-    if (form.password.length < 6) { setError('Password must be at least 6 characters'); return; }
+    const nextErrors = await validateRegister();
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
     setLoading(true);
     const { confirmPassword, ...payload } = form;
     const res = await register(payload);
@@ -59,6 +137,14 @@ export default function Register() {
     color: 'rgba(45,45,45,0.6)',
     marginBottom: '8px',
   };
+
+  const fieldStyle = (field) => ({
+    ...inputStyle,
+    borderColor: errors[field] ? '#ef4444' : 'rgba(45,45,45,0.15)',
+  });
+
+  const focusStyle = (e) => { e.target.style.borderColor = 'var(--primary)'; };
+  const blurStyle = (field) => (e) => { e.target.style.borderColor = errors[field] ? '#ef4444' : 'rgba(45,45,45,0.15)'; };
 
   if (success) {
     return (
@@ -126,17 +212,19 @@ export default function Register() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
               <div>
                 <label style={labelStyle}>Full Name</label>
-                <input style={inputStyle} placeholder="Alex Mercer" value={form.name}
+                <input style={fieldStyle('name')} placeholder="Alex Mercer" value={form.name}
                   onChange={set('name')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('name')} />
+                {errors.name && <p className="text-red-600 text-xs mt-2">{errors.name}</p>}
               </div>
               <div>
                 <label style={labelStyle}>Username</label>
-                <input style={inputStyle} placeholder="Elite_01" value={form.username}
+                <input style={fieldStyle('username')} placeholder="Elite_01" value={form.username}
                   onChange={set('username')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('username')} />
+                {errors.username && <p className="text-red-600 text-xs mt-2">{errors.username}</p>}
               </div>
             </div>
 
@@ -144,17 +232,19 @@ export default function Register() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
               <div>
                 <label style={labelStyle}>Email Address</label>
-                <input style={inputStyle} type="email" placeholder="operative@elitegear.com"
+                <input style={fieldStyle('email')} type="email" placeholder="operative@elitegear.com"
                   value={form.email} onChange={set('email')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('email')} />
+                {errors.email && <p className="text-red-600 text-xs mt-2">{errors.email}</p>}
               </div>
               <div>
                 <label style={labelStyle}>Mobile Number</label>
-                <input style={inputStyle} type="tel" placeholder="+94 XXX XXX XXX"
+                <input style={fieldStyle('mobile')} type="tel" placeholder="+94 XXX XXX XXX"
                   value={form.mobile} onChange={set('mobile')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('mobile')} />
+                {errors.mobile && <p className="text-red-600 text-xs mt-2">{errors.mobile}</p>}
               </div>
             </div>
 
@@ -162,20 +252,22 @@ export default function Register() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
               <div>
                 <label style={labelStyle}>National Identity Card (NIC)</label>
-                <input style={inputStyle} placeholder="XXXXX-XXXXX-XX"
+                <input style={fieldStyle('nic')} placeholder="XXXXX-XXXXX-XX"
                   value={form.nic} onChange={set('nic')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('nic')} />
+                {errors.nic && <p className="text-red-600 text-xs mt-2">{errors.nic}</p>}
               </div>
               <div>
                 <label style={labelStyle}>Region</label>
-                <select style={{ ...inputStyle, cursor: 'pointer' }}
+                <select style={{ ...fieldStyle('region'), cursor: 'pointer' }}
                   value={form.region} onChange={set('region')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'}>
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('region')}>
                   <option value="">SELECT REGION</option>
                   {REGIONS.map(r => <option key={r} value={r}>{r}</option>)}
                 </select>
+                {errors.region && <p className="text-red-600 text-xs mt-2">{errors.region}</p>}
               </div>
             </div>
 
@@ -183,17 +275,19 @@ export default function Register() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
               <div>
                 <label style={labelStyle}>Password</label>
-                <input style={inputStyle} type="password" placeholder="••••••••"
+                <input style={fieldStyle('password')} type="password" placeholder="••••••••"
                   value={form.password} onChange={set('password')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('password')} />
+                {errors.password && <p className="text-red-600 text-xs mt-2">{errors.password}</p>}
               </div>
               <div>
                 <label style={labelStyle}>Confirm Password</label>
-                <input style={inputStyle} type="password" placeholder="••••••••"
+                <input style={fieldStyle('confirmPassword')} type="password" placeholder="••••••••"
                   value={form.confirmPassword} onChange={set('confirmPassword')} required
-                  onFocus={e => e.target.style.borderColor = 'var(--primary)'}
-                  onBlur={e => e.target.style.borderColor = 'rgba(45,45,45,0.15)'} />
+                  onFocus={focusStyle}
+                  onBlur={blurStyle('confirmPassword')} />
+                {errors.confirmPassword && <p className="text-red-600 text-xs mt-2">{errors.confirmPassword}</p>}
               </div>
             </div>
 
