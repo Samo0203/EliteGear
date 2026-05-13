@@ -34,7 +34,7 @@ export function AdminUsers() {
           <h1 style={{ fontSize:'24px', fontWeight:700, color:'#000000' }}>Users</h1>
         </div>
 
-        {/* SEARCH BAR WITH X BUTTON */}
+        {/* Search Bar */}
         <div style={{ position:'relative', width:'220px' }}>
           <input
             type="text"
@@ -138,7 +138,7 @@ export function AdminUsers() {
 const inputStyle = { width:'100%', background:'#FFFFFF', border:'1px solid var(--ghost-border)', color:'#000000', borderRadius:'8px', padding:'12px 14px', fontFamily:"'Lexend',sans-serif", fontSize:'13px', outline:'none', cursor:'default' };
 const labelStyle = { display:'block', fontSize:'10px', fontWeight:500, textTransform:'uppercase', letterSpacing:'0.05em', color:'rgba(45,45,45,0.55)', marginBottom:'6px' };
 
-// View User Modal Component
+// View User
 export function ViewUserModal({ user, onClose }) {
   if (!user) return null;
 

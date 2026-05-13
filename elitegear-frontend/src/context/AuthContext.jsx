@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
         return { success: true, user: adminUser };
       }
 
-      /* Normal user login */
+      /* User login */
       const res = await userAPI.login({ username, password });
       if (res.data.success) {
         const userData = { ...res.data.user, isAdmin: res.data.user.role === 'ADMIN' };

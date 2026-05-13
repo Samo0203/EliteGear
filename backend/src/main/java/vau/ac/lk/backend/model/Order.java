@@ -34,9 +34,6 @@ public class Order {
      */
     private String status = "PENDING";
 
-    /**
-     * Recipient / delivery info captured from Checkout form
-     */
     private Map<String, Object> recipient;
 
     @CreatedDate

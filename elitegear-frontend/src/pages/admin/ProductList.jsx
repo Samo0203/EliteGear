@@ -61,7 +61,7 @@ export default function ProductList() {
     }
   };
 
-  // ==================== ADD TO CART FUNCTION ====================
+  // ADD TO CART
   const addToCart = (product) => {
     const currentCart = JSON.parse(localStorage.getItem('cart') || '[]');
     
@@ -77,7 +77,7 @@ export default function ProductList() {
     localStorage.setItem('cart', JSON.stringify(currentCart));
     alert(`${product.name} added to cart!`);
   };
-  // ============================================================
+ 
 
   if (loading) return <div className="text-center py-20 text-xl">Loading products...</div>;
 
@@ -93,7 +93,7 @@ export default function ProductList() {
         </button>
       </div>
 
-      {/* Product Form Modal - (unchanged) */}
+      {/* Product Form*/}
       {showForm && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
           <div className="bg-zinc-900 rounded-3xl p-8 w-full max-w-2xl">

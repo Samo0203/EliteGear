@@ -7,7 +7,7 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-/* ── Products ── */
+/*Products */
 export const productAPI = {
   getAll:    ()         => api.get('/getproduct'),
   getById:   (id)       => api.get(`/getproduct/${id}`),
@@ -15,8 +15,8 @@ export const productAPI = {
   create:    (data)     => api.post('/postproduct', data),
   update:    (id, data) => api.put(`/putproduct/${id}`, data),  patch:     (id, data) => api.patch(`/patchproduct/${id}`, data),  delete:    (id)       => api.delete(`/deleteproduct/${id}`),
 };
-
-/* ── Categories ── */
+  
+/*Categories */
 export const categoryAPI = {
   getAll:  ()         => api.get('/getcategory'),
   getById: (id)       => api.get(`/getcategory/${id}`),
@@ -25,7 +25,7 @@ export const categoryAPI = {
   delete:  (id)       => api.delete(`/deletecategory/${id}`),
 };
 
-/* ── Users ── */
+/*Users */
 export const userAPI = {
   register: (data)        => api.post('/register', data),
   login:    (credentials) => api.post('/login', credentials),
@@ -34,7 +34,7 @@ export const userAPI = {
   delete:   (id)          => api.delete(`/users/${id}`),
 };
 
-/* ── Orders ── */
+/*Orders */
 export const orderAPI = {
   getAll:       ()         => api.get('/orders'),
   getById:      (id)       => api.get(`/orders/${id}`),

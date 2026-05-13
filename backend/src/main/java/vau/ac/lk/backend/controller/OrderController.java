@@ -37,7 +37,7 @@ public class OrderController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Place a new order
+    // Add a new order
     @PostMapping("/orders")
     public ResponseEntity<Order> create(@RequestBody Order order) {
         return ResponseEntity.ok(service.createOrder(order));
@@ -54,7 +54,7 @@ public class OrderController {
         return ResponseEntity.ok(service.updateStatus(id, status));
     }
 
-    // Partial update (generic)
+    // Partial update
     @PatchMapping("/orders/{id}")
     public ResponseEntity<Order> patch(@PathVariable String id,
                                        @RequestBody Map<String, Object> updates) {

@@ -13,18 +13,14 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 public class SecurityConfig {
 
     /**
-     * BCryptPasswordEncoder bean — injected into UserService.
-     * Centralised here so Spring manages the lifecycle.
+     * BCryptPasswordEncoder bean
      */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    /**
-     * Permit all endpoints for now (no JWT).
-     * For a production system you would lock these down per-role.
-     */
+    
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http

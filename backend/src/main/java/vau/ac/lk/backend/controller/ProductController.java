@@ -29,7 +29,7 @@ public class ProductController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    // Filter by category — used by Category page
+    // Filter by category
     @GetMapping("/getproduct/category/{category}")
     public List<Product> getByCategory(@PathVariable String category) {
         return service.getProductsByCategory(category);

@@ -35,10 +35,6 @@ public class User {
     private String nic;        
     private String avatarUrl;
 
-    /**
-     * WRITE_ONLY: password is accepted on input but never serialised
-     * in any API response — prevents hashed password leaking to frontend.
-     */
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 

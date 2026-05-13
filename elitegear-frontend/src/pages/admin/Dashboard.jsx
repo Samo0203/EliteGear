@@ -59,7 +59,7 @@ export function Dashboard() {
           </h1>
         </div>
 
-        {/* Date and Time Widget - Top Right Corner */}
+        {/* Date and Time Widget */}
         <div style={{
           background: 'linear-gradient(135deg, #F9F6F2 0%, #FAFAF8 100%)',
           borderRadius: '12px',

@@ -13,7 +13,7 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository     userRepository;
-    private final BCryptPasswordEncoder passwordEncoder; // ← injected Bean, NOT new'd manually
+    private final BCryptPasswordEncoder passwordEncoder;
 
     // ── Register ──────────────────────────────────────────────────────────────
     public void registerUser(User user) {
@@ -43,7 +43,7 @@ public class UserService {
             throw new RuntimeException("Invalid credentials");
         }
 
-        return user;  // password is WRITE_ONLY in model — won't appear in JSON response
+        return user;
     }
 
     // ── Admin helpers ─────────────────────────────────────────────────────────
