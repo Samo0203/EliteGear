@@ -1,156 +1,108 @@
-# 🛒 EliteGear E-Commerce System
+# 🛒 EliteGear
 
 ## 📌 Project Overview
 
-EliteGear is a full-stack e-commerce web application built using **React (Frontend)** and **Spring Boot (Backend)**. It allows users to browse products, manage carts, and perform secure authentication, while admins can manage products and categories.
+EliteGear is a full-stack **e-commerce web application** built with **React** frontend and **Spring Boot** backend. It provides a complete online shopping experience with admin management capabilities.
 
----
+## 🚀 Built With
 
-## 🚀 Technologies Used
+- **Frontend**: React, Tailwind CSS
+- **Backend**: Java, Spring Boot
+- **Database**: MongoDB
+- **Build Tools**: Maven, npm
 
-### 💻 Frontend
+## ✨ Key Features
 
-* React.js
-* Vite
-* CSS
-* Axios (API calls)
+- User registration and login
+- Product browsing, category filtering, and search
+- Order placement and order history
+- Admin dashboard for managing products, categories, users, and orders
+- Revenue tracking
+- Responsive design
 
-### ⚙️ Backend
-
-* Java
-* Spring Boot
-* Spring Data JPA
-* Maven
-
-### 🗄️ Database
-
-* MySQL
-
----
-
-## ✨ Features
-
-### 👤 User Features
-
-* User Registration & Login
-* Browse Products
-* Add to Cart
-* View Profile
-
-### 🛠️ Admin Features
-
-* Admin Dashboard
-* Manage Products (CRUD)
-* View Product List
-
----
-
-## 🔐 Authentication
-
-* Role-based access control (`USER`, `ADMIN`)
-* Admin users have access to dashboard and product management
-
----
-
-## ⚙️ Setup Instructions
-
-### 1️⃣ Clone Repository
+## 📁 Repository Structure
 
 ```bash
-git clone https://github.com/your-repo/EliteGear.git
+EliteGear/
+├── backend/                          # Spring Boot Backend
+│   ├── src/main/java/vau/ac/lk/backend/
+│   │   ├── config/                   # SecurityConfig, CorsConfig
+│   │   ├── controller/               # OrderController, ProductController, etc.
+│   │   ├── model/                    # User, Product, Order, Category
+│   │   ├── repository/               # MongoDB Repositories
+│   │   ├── service/                  # Business Logic Layer
+│   │   └── BackendApplication.java
+│   ├── src/main/resources/
+│   └── pom.xml
+│
+├── elitegear-frontend/               # React + Vite Frontend
+│   ├── src/
+│   └── package.json
+│
+└── README.md
+```
+
+⚙️ Getting Started
+1️⃣ Clone the repository
+Bashgit clone https://github.com/<your-username>/EliteGear.git
 cd EliteGear
-```
+2️⃣ Configure MongoDB
+Make sure MongoDB is installed and running. No need to create a database manually — Spring Boot will create it automatically.
+Update backend/src/main/resources/application.properties:
+propertiesspring.data.mongodb.uri=mongodb://localhost:27017/elitegear
+spring.data.mongodb.database=elitegear
 
----
-
-### 2️⃣ Backend Setup
-
-```bash
-cd backend
-mvn spring-boot:run
-```
-
-Backend runs at:
-👉 http://localhost:8080
-
----
-
-### 3️⃣ Frontend Setup
-
-```bash
-cd elitegear-frontend
+# Optional: For better logging
+logging.level.org.springframework.data.mongodb=DEBUG
+3️⃣ Run the Backend
+Bashcd backend
+./mvnw spring-boot:run
+Backend will start at: http://localhost:8080
+4️⃣ Run the Frontend
+Bashcd elitegear-frontend
 npm install
 npm run dev
-```
+Frontend will be available at: http://localhost:5173
+📌 API Base Path
+All backend endpoints are prefixed with /eg
+Example:
 
-Frontend runs at:
-👉 http://localhost:5173
+GET http://localhost:8080/eg/getproduct
+POST http://localhost:8080/eg/orders
 
----
+🔐 Current Authentication Status
 
-## 🗄️ Database Configuration
+User registration and login are implemented.
+Passwords are securely hashed using BCrypt.
+JWT Authentication is not yet implemented (All endpoints are currently public for development).
+Role-based access control (USER, ADMIN) is planned for future implementation.
 
-Update `application.properties`:
+🧪 Testing
 
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/elitegear
-spring.datasource.username=root
-spring.datasource.password=yourpassword
-spring.jpa.hibernate.ddl-auto=update
-```
+Backend unit tests can be run with:Bashcd backend
+./mvnw test
+Frontend tests are not implemented yet.
 
----
+🌟 Admin Features
+You can manage the system through these endpoints:
 
-## 🔑 Admin Access
+Products: POST /eg/postproduct, GET /eg/getproduct, etc.
+Categories: POST /eg/postcategory, GET /eg/getcategory
+Orders: View all orders, update status, view total revenue
+Users: View and manage registered users
 
-To login as admin:
+📌 Notes
 
-### Option 1: Use existing admin
+Ensure MongoDB is running before starting the backend.
+Frontend API base URL should be configured to point to http://localhost:8080/eg
+This project is currently in development stage. Security hardening (JWT + RBAC) is recommended before production.
 
-```
-Email: admin@gmail.com
-Password: admin123
-```
+🚀 Future Enhancements
 
-### Option 2: Create admin manually
+JWT Authentication & Role-based Authorization
+Shopping Cart persistence
+Payment gateway integration
+Order validation
 
-```sql
-INSERT INTO users (name, email, password, role)
-VALUES ('Admin', 'admin@gmail.com', 'admin123', 'ADMIN');
-```
-
----
-
-## 📁 Project Structure
-
-```
-EliteGear/
-│
-├── backend/                 # Spring Boot Backend
-│   ├── controller/
-│   ├── service/
-│   ├── repository/
-│   └── model/
-│
-├── elitegear-frontend/     # React Frontend
-│   ├── pages/
-│   ├── components/
-│   └── services/
-```
-
----
-
-## 🧠 Future Improvements
-
-* JWT Authentication
-* Payment Integration
-* Order Management
-* Responsive UI enhancements
-
----
-
-## 👨‍💻 Author
-
-Developed as an academic project for learning full-stack development.
-
----
+📄 License
+This project is available under the MIT License.
